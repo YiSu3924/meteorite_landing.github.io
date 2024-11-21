@@ -5,12 +5,32 @@ output:
     toc: true
     toc_float: true
 ---
+<style>
+  body {
+    background-image: url('https://w.wallhaven.cc/full/8o/wallhaven-8o2zd1.jpg'); 
+    background-size: cover;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+  }
+  
+  h1 {
+    font-size: 5em !important;
+    font-weight: bold;
+    text-align: center; 
+    margin-top: 40px; 
+    margin-bottom: 40px;
+    color: #f5f5f5; 
+  }
+  h3 {
+    text-align: center;
+    margin-top: 40px; 
+    margin-bottom: 40px;
+  }
+</style>
 
-## Welcome to our 
+### Welcome to our Website
 
-![](https://media3.giphy.com/media/l3q2sLRa7XYfVRq8w/200w.webp?cid=ecf05e477i1ztlq8gkjtdqr9bqg9rvqk0n7tb1rrzbansw7g&ep=v1_gifs_related&rid=200w.webp&ct=g)
 
-![](https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExa2Ryb2tkenJoNzY0M2dyaTBnYjExajZibzlibWNuMW5uOTd1NjFwaSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/bWhPVkYuKkBTfUZzmZ/giphy.webp)
+##### Overview: 
 
-![](https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExbGluZ2hiZGJmcThlbmNraXUwYnFucjQ1MmFiYzljZ3V4aHc3bTlvYyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l41lR0G2fCvJXEota/giphy.webp)
-
+This project explores meteorite landing data to analyze their geographic distribution, mass, and trends over time. Inspired by events like the Atlas Comet’s close approach and the “two moons” phenomenon, we aim to uncover patterns in how meteorites impact Earth. Using cleaned data from Kaggle, we have identified trends in landing locations, mass variations, and temporal changes.
