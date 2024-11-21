@@ -355,7 +355,117 @@ div.tocify {
 </div>
 
 
-
+<div id="motivation" class="section level3">
+<h3>Motivation:</h3>
+<p>This project seeks to explore meteorite landing data to understand
+the spatial and temporal distribution of meteorite impacts on Earth. By
+analyzing this data, we aim to answer questions about where meteorites
+tend to land, their mass distributions, and possible patterns in landing
+locations over time. This project is driven by a fascination with
+planetary science and geology, especially the ways meteorite impacts can
+reveal clues about space debris, the makeup of other celestial bodies,
+and Earth’s own geological story. Through this analysis, we are hoping
+to add something valuable to the ongoing exploration of these big
+questions.</p>
+<p><img src="Photo/moon.png" style="width:75%"></p>
+</div>
+<div id="related-work" class="section level3">
+<h3>Related work:</h3>
+<p>Our interest in this project was sparked by recent celestial events,
+particularly the close approach of the Atlas Comet observed from Purple
+Mountain Observatory and the appearance of a unique phenomenon where the
+sky seemed to host ‘two moons.’ The Atlas Comet’s approach offered a
+vivid reminder of how nearby cosmic bodies are to Earth, inspiring a
+sense of curiosity about these rare events. Similarly, witnessing the
+‘two moons’ effect underscored the awe and fascination that such
+occurrences bring. This project seeks to explore the sites of meteorite
+landings worldwide, with the hope of uncovering patterns and insights
+into how these extraterrestrial fragments reach and impact Earth,
+ultimately connecting us more closely with the universe’s diversity.</p>
+</div>
+<div id="initial-questions" class="section level3">
+<h3>Initial questions:</h3>
+<p>How are meteorites distributed across the world all years from
+1970-2013?</p>
+<p>What is the number of meteorite landings changed through years by
+continents? Is a statistically significant difference in mean meteorite
+mass across continents? What are the anticipated geographical locations
+where meteorites are likely to land?</p>
+</div>
+<div id="data" class="section level3">
+<h3>Data:</h3>
+<p>The dataset was obtained from Kaggle. As the data was provided as a
+CSV file, no additional scraping was necessary. We convert column names
+to lowercase, filter for records between the years 1970 and 2013, drop
+the “fall” column (since all entries have the same value), and filter
+out rows where latitude or longitude data is missing. We derived a
+continent column by classifying data according to the geo_location
+attribute.</p>
+</div>
+<div id="exploratory-analysis" class="section level3">
+<h3>Exploratory analysis:</h3>
+<p>Firstly, we generated an interactive map showing meteorite landings
+by continent from 1970 to 2013. It assigns unique colors to continents,
+subsets data for each, and plots markers with hover details (name, year,
+mass, and continent) using Plotly. Styled with an “open-street-map”
+background and a global view, the map provides a clear visualization of
+meteorite landing patterns.</p>
+<p>Secondly, we created a line plot showing the number of meteorite
+landings over time, categorized by continent. The data is grouped by
+year and continent, with the count of landings calculated for each
+group. Using Plotly, a scatter plot in line mode is created, with
+different colors representing continents. This visualization highlights
+temporal trends in meteorite landings across different continents.</p>
+<p>Thirdly, we conducted an analysis using Welch’s ANOVA to examine
+differences in meteorite mass across continents, accounting for unequal
+variances. With a significance level of 0.05, the results (F = 9.2968,
+p-value 2.062×10−112.062 ^{-11}) led us to reject the null hypothesis,
+indicating significant differences in mean mass among continents.
+Additionally, we created a summary table combining meteorite landing
+counts with continent areas to calculate landings per square kilometer,
+providing more spatial insights in a well-organized format.</p>
+<p>Lastly, we predicted potential meteorite landing locations using
+clustering and random sampling techniques. First, k-means clustering is
+applied to meteorite data (reclat and reclong) with 500 centers to
+identify representative clusters of landing sites. Cluster centers are
+extracted, and random points are generated around these centers using
+normal distributions to simulate 5,000 potential landing locations. An
+interactive Plotly map visualizes the predicted locations as
+markers.</p>
+</div>
+<div id="discussion" class="section level3">
+<h3>Discussion:</h3>
+<p>The interactive map reveals an uneven global distribution of
+meteorite landings, with dense clusters in well-populated and
+extensively researched regions like Europe, North America, and parts of
+Asia. In contrast, regions such as Africa and Antarctica, as well as
+oceanic areas, show fewer recorded landings, likely due to observational
+and accessibility challenges. The Southern Hemisphere, particularly
+South America and Oceania, also has fewer data points compared to the
+Northern Hemisphere. These patterns highlight the influence of
+observational bias and the need for improved data collection in
+underrepresented regions to better understand global meteorite
+distribution.</p>
+<p>The line plot shows significant variation in meteorite landings
+across continents. Antarctica leads with sharp peaks, which reflects
+focused research and preservation conditions, while oceans have minimal
+activity due to detection challenges. Africa, Asia, and Europe show
+steady but low counts, with North America showing moderate fluctuations.
+Oceania and South America have sparse data, likely due to fewer
+expeditions. The temporal spikes indicate periods of increased research
+efforts or significant meteorite events, emphasizing the influence of
+geography and observational factors on recorded landings.</p>
+<p>The ANOVA test produced a p-value below 0.05, which leads to the
+rejection of the null hypothesis, indicating significant differences in
+mean meteorite masses across continents. This suggests that meteorite
+masses may vary by continent, potentially due to differences in
+geographic conditions, observation efforts, or preservation
+environments.</p>
+<p>The prediction map shows potential meteorite landing clusters across
+all continents, with higher concentrations in Antarctica, Mediterranean,
+and North Africa. This map offers insights into landing patterns
+influenced by natural distribution and observational factors.</p>
+</div>
 
 
 
