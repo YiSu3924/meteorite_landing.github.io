@@ -92,6 +92,10 @@ map <- map %>%
 map
 ```
 
+
+The interactive map shows dense meteorite clusters in well-studied regions like Europe and North America, while areas like Africa, Antarctica, and oceans are underrepresented due to accessibility challenges. This highlights observational bias and the need for better data collection globally.
+
+
 # Line plot based on the year and continents
 
 ```{r}
@@ -115,6 +119,10 @@ line_plot_by_continent <- plot_ly(
   )
 line_plot_by_continent
 ```
+
+
+The line plot reveals variation in meteorite landings, with Antarctica peaking due to research focus, while oceans and continents like Oceania and South America show sparse data from limited expeditions. Temporal spikes reflect periods of intense research or major meteorite events, which highlights geographic and observational biases.
+
 
 # Welch’s ANOVA test
 - If the p-value from Levene’s Test is greater than 0.05, proceed with a standard ANOVA test.
@@ -229,5 +237,5 @@ fig
 ```
 
 
-
+The prediction map highlights potential meteorite landing hotspots worldwide, with denser clusters in Antarctica, the Mediterranean, and North Africa. It provides insights into landing patterns shaped by both natural distribution and observational influences.
 
