@@ -7,16 +7,6 @@ output:
     code_folding: hide
 ---
 
-<style>
-body {
-    background-image: url('https://w.wallhaven.cc/full/8o/wallhaven-8o2zd1.jpg');
-    background-size: cover;
-    background-attachment: fixed;
-    background-position: center;
-    background-repeat: no-repeat;
-    color: white;
-}
-</style>
 
 The dataset used in this project was sourced from Kaggle, where it was provided as a CSV file. You can explore or download the dataset directly from Kaggle by visiting [this link](https://www.kaggle.com/code/kinguistics/exploring-meteorite-landing-sites/input).
 
@@ -31,6 +21,12 @@ library(dplyr)
 library(tidyverse)
 library(janitor)
 library(ggplot2)
+library(maps)
+library(plotly)
+library(rnaturalearth)
+library(sf)
+library(RColorBrewer)
+library(car)
 ```
 
 ```{r}
@@ -65,6 +61,7 @@ meteorite_data_with_continents <- meteorite_data_with_continents %>%
 head(meteorite_data_with_continents)
 ```
 
+The dataset is a simple feature collection comprising 6 features and 10 fields. The fields include key attributes such as the name, id, mass, year, latitude, and longitude of meteorite landings, along with a derived continent column.
 
 # Statistics of Variables
 
@@ -72,6 +69,7 @@ head(meteorite_data_with_continents)
 summary(meteorite_data_cleaned)
 ```
 
+The dataset contains 35,882 entries. The mass variable ranges from 0 to 4,000,000 grams, with a mean of 1,484 grams and a median of 25 grams, indicating significant skewness. The year variable spans from 1970 to 2013, with a median year of 1997. Latitude and longitude values reflect global coverage, while geographic and meteorite classification details enrich the dataset.
 
 # Distribution of Mass
 
@@ -87,6 +85,7 @@ meteorite_data_cleaned %>%
   )
 ```
 
+The mass distribution is heavily skewed due to the presence of extremely large meteorites. To normalize this skew, the log transformation of the mass was applied, resulting in a distribution resembling a normal distribution. This transformation facilitates better visualization and analysis.
 
 # Numbers of landings through Year
 
@@ -100,3 +99,27 @@ meteorite_data_cleaned %>%
     y = "Number of Landings"
   )
 ```
+
+Meteorite landings were distributed unevenly across the years, with a noticeable increase in records toward the later part of the timeframe. This could be attributed to improved detection and recording technologies. A time-series plot provides insights into the frequency trends over the years.
+
+# Final Dataset Description
+
+`name`: The name of the meteorite landing.
+
+`id`: A unique identifier for each meteorite.
+
+`nametype`: The classification of the name type (e.g., "Valid").
+
+`recclass`: The classification of the meteorite based on its composition.
+
+`mass`: The mass of the meteorite in grams.
+
+`year`: The year the meteorite landed or was discovered.
+
+`reclat`: The latitude coordinate of the meteorite landing site.
+
+`reclong`: The longitude coordinate of the meteorite landing site.
+
+`geo_location`: A formatted string combining the latitude and longitude of the meteorite landing.
+
+`continent`: The continent where the meteorite landed, derived from the latitude and longitude.

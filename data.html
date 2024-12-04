@@ -367,16 +367,6 @@ div.tocify {
 </div>
 
 
-<style>
-body {
-    background-image: url('https://w.wallhaven.cc/full/8o/wallhaven-8o2zd1.jpg');
-    background-size: cover;
-    background-attachment: fixed;
-    background-position: center;
-    background-repeat: no-repeat;
-    color: white;
-}
-</style>
 <p>The dataset used in this project was sourced from Kaggle, where it
 was provided as a CSV file. You can explore or download the dataset
 directly from Kaggle by visiting <a
@@ -441,6 +431,10 @@ head(meteorite_data_with_continents)</code></pre>
 ## 4  (13.660330, 28.960000)        Africa    POINT (28.96 13.66033)
 ## 5   (45.821330, 6.015330)        Europe  POINT (6.01533 45.82133)
 ## 6  (20.745750, 32.412750)        Africa POINT (32.41275 20.74575)</code></pre>
+<p>The dataset is a simple feature collection comprising 6 features and
+10 fields. The fields include key attributes such as the name, id, mass,
+year, latitude, and longitude of meteorite landings, along with a
+derived continent column.</p>
 </div>
 <div id="statistics-of-variables" class="section level1">
 <h1>Statistics of Variables</h1>
@@ -466,6 +460,12 @@ head(meteorite_data_with_continents)</code></pre>
 ##                    
 ##                    
 ## </code></pre>
+<p>The dataset contains 35,882 entries. The mass variable ranges from 0
+to 4,000,000 grams, with a mean of 1,484 grams and a median of 25 grams,
+indicating significant skewness. The year variable spans from 1970 to
+2013, with a median year of 1997. Latitude and longitude values reflect
+global coverage, while geographic and meteorite classification details
+enrich the dataset.</p>
 </div>
 <div id="distribution-of-mass" class="section level1">
 <h1>Distribution of Mass</h1>
@@ -479,6 +479,11 @@ head(meteorite_data_with_continents)</code></pre>
     y = &quot;Count&quot;
   )</code></pre>
 <p><img src="data_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>The mass distribution is heavily skewed due to the presence of
+extremely large meteorites. To normalize this skew, the log
+transformation of the mass was applied, resulting in a distribution
+resembling a normal distribution. This transformation facilitates better
+visualization and analysis.</p>
 </div>
 <div id="numbers-of-landings-through-year" class="section level1">
 <h1>Numbers of landings through Year</h1>
@@ -491,6 +496,31 @@ head(meteorite_data_with_continents)</code></pre>
     y = &quot;Number of Landings&quot;
   )</code></pre>
 <p><img src="data_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>Meteorite landings were distributed unevenly across the years, with a
+noticeable increase in records toward the later part of the timeframe.
+This could be attributed to improved detection and recording
+technologies. A time-series plot provides insights into the frequency
+trends over the years.</p>
+</div>
+<div id="final-dataset-description" class="section level1">
+<h1>Final Dataset Description</h1>
+<p><code>name</code>: The name of the meteorite landing.</p>
+<p><code>id</code>: A unique identifier for each meteorite.</p>
+<p><code>nametype</code>: The classification of the name type (e.g.,
+“Valid”).</p>
+<p><code>recclass</code>: The classification of the meteorite based on
+its composition.</p>
+<p><code>mass</code>: The mass of the meteorite in grams.</p>
+<p><code>year</code>: The year the meteorite landed or was
+discovered.</p>
+<p><code>reclat</code>: The latitude coordinate of the meteorite landing
+site.</p>
+<p><code>reclong</code>: The longitude coordinate of the meteorite
+landing site.</p>
+<p><code>geo_location</code>: A formatted string combining the latitude
+and longitude of the meteorite landing.</p>
+<p><code>continent</code>: The continent where the meteorite landed,
+derived from the latitude and longitude.</p>
 </div>
 
 
