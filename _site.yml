@@ -12,7 +12,7 @@ navbar:
     - text: "Analysis"
       href: analysis.html
     - icon: fa-github fa-lg
-      href: https://github.com/YiSu3924/P8105_fp_meteorite_landing.git
+      href: https://github.com/YiSu3924/meteorite_landing.github.io
 output:
   html_document:
     theme: darkly
