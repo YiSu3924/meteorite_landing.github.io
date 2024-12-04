@@ -20,6 +20,7 @@ body {
 
 The dataset used in this project was sourced from Kaggle, where it was provided as a CSV file. You can explore or download the dataset directly from Kaggle by visiting [this link](https://www.kaggle.com/code/kinguistics/exploring-meteorite-landing-sites/input).
 
+
 # Clean data
 
 As part of the data cleaning, we standardized the column names by converting them all to lowercase for consistency and ease of use in future analysis. We then filtered the dataset to include only records from the years 1970 to 2013, ensuring that the analysis focused on a more relevant and manageable timeframe. Next, we identified and removed the "fall" column since all its entries contained the same value. Rows with missing latitude or longitude values were also excluded to maintain the accuracy and reliability of geographic data. Additionally, we enriched the dataset by creating a new "continent" column. This was achieved by classifying each record based on its `geo_location` attribute, which allows for more detailed geographic insights in the analysis. 
@@ -46,6 +47,7 @@ meteorite_data_cleaned <- meteorite_data %>%
   filter(mass > 0)
 ```
 
+
 # Glimpse of data
 
 ```{r}
@@ -63,11 +65,13 @@ meteorite_data_with_continents <- meteorite_data_with_continents %>%
 head(meteorite_data_with_continents)
 ```
 
+
 # Statistics of Variables
 
 ```{r}
 summary(meteorite_data_cleaned)
 ```
+
 
 # Distribution of Mass
 
@@ -82,6 +86,7 @@ meteorite_data_cleaned %>%
     y = "Count"
   )
 ```
+
 
 # Numbers of landings through Year
 

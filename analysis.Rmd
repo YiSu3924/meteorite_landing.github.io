@@ -4,7 +4,19 @@ output:
   html_document:
     toc: true
     toc_float: true
+    code_folding: hide
 ---
+
+<style>
+body {
+    background-image: url('https://w.wallhaven.cc/full/8o/wallhaven-8o2zd1.jpg');
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: white;
+}
+</style>
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -21,7 +33,7 @@ library(car)
 ```
 
 
-```{r, include = FALSE}
+```{r}
 meteorite_data <- read.csv("data/meteorite-landings.csv")
 
 meteorite_data <- meteorite_data %>% 
@@ -33,12 +45,10 @@ meteorite_data_cleaned <- meteorite_data %>%
   filter(!is.na(reclat) & !is.na(reclong)) %>%
   filter(!is.na(mass) & !is.na(year)) %>%
   filter(mass > 0)
-
-summary(meteorite_data_cleaned)
 ```
 
 
-```{r, include = FALSE}
+```{r}
 meteorite_sf <- st_as_sf(meteorite_data_cleaned, coords = c("reclong", "reclat"), crs = 4326, remove = FALSE)
 
 continents <- ne_countries(scale = "medium", returnclass = "sf") %>%
@@ -49,13 +59,11 @@ meteorite_data_with_continents <- st_join(meteorite_sf, continents["continent"],
 
 meteorite_data_with_continents <- meteorite_data_with_continents %>%
   mutate(continent = replace_na(continent, "Ocean"))
-
-print(meteorite_data_with_continents)
 ```
 
 # Make the location based on the map
 
-```{r, echo = FALSE}
+```{r}
 continents <- unique(meteorite_data_with_continents %>% pull(continent))
 color_palette <- setNames(brewer.pal(length(continents), "Set1"), continents)
 map <- plot_ly(type = 'scattermapbox', mode = 'markers')
@@ -86,7 +94,7 @@ map
 
 # Line plot based on the year and continents
 
-```{r, echo = FALSE}
+```{r}
 yearly_landings <- meteorite_data_with_continents %>%
   st_drop_geometry() %>%
   group_by(year, continent) %>%
@@ -113,7 +121,7 @@ line_plot_by_continent
 
 - If the p-value is less than 0.05, consider using Welch’s ANOVA instead, which doesn’t assume equal variances.
 
-```{r, echo = FALSE}
+```{r}
 meteorite_data_with_continents <- meteorite_data_with_continents %>%
   mutate(continent = as.factor(continent))
 
@@ -129,7 +137,7 @@ Rejection Rule: Reject the null hypothesis if the p-value is less than the signi
 
 $$\text{Reject } H_0 \text{ if } p\text{-value} < \alpha = 0.05.$$
 
-```{r, echo = FALSE}
+```{r}
 welch_anova <- oneway.test(mass ~ continent, data = meteorite_data_with_continents, var.equal = FALSE)
 print(welch_anova)
 ```
@@ -138,14 +146,14 @@ $$F = 9.2968, \quad \text{df}_1 = 7, \quad \text{df}_2 = 2529, \quad p\text{-val
 $$\text{Since } p\text{-value} < 0.05, \text{ we reject } H_0.$$
 Conclusion: There is a statistically significant difference in mean meteorite mass across continents.
 
-```{r, echo = FALSE}
+```{r}
 summary_table <- meteorite_data_with_continents %>%
   group_by(continent) %>%   
   summarize(count = n()) %>%        
   arrange(continent)
 ```
 
-```{r, echo = FALSE}
+```{r}
 area_data <- data.frame(
   continent = c("Africa", "Antarctica", "Asia", "Europe", 
                 "North America", "South America", "Oceania"),
@@ -178,7 +186,7 @@ Data Quality and Collection Bias: Differences in meteorite mass across continent
 
 # Prediction
 
-```{r, echo = FALSE}
+```{r}
 set.seed(123)
 
 clusters <- kmeans(meteorite_data_cleaned[, c("reclat", "reclong")], centers = 500)
