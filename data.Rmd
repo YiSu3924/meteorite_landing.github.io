@@ -4,8 +4,94 @@ output:
   html_document:
     toc: true
     toc_float: true
+    code_folding: hide
 ---
 
-The dataset used in this project was sourced from Kaggle, where it was provided as a CSV file. 
+<style>
+body {
+    background-image: url('https://w.wallhaven.cc/full/8o/wallhaven-8o2zd1.jpg');
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: white;
+}
+</style>
+
+The dataset used in this project was sourced from Kaggle, where it was provided as a CSV file. You can explore or download the dataset directly from Kaggle by visiting [this link](https://www.kaggle.com/code/kinguistics/exploring-meteorite-landing-sites/input).
+
+# Clean data
 
 As part of the data cleaning, we standardized the column names by converting them all to lowercase for consistency and ease of use in future analysis. We then filtered the dataset to include only records from the years 1970 to 2013, ensuring that the analysis focused on a more relevant and manageable timeframe. Next, we identified and removed the "fall" column since all its entries contained the same value. Rows with missing latitude or longitude values were also excluded to maintain the accuracy and reliability of geographic data. Additionally, we enriched the dataset by creating a new "continent" column. This was achieved by classifying each record based on its `geo_location` attribute, which allows for more detailed geographic insights in the analysis. 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(tidyverse)
+library(janitor)
+library(ggplot2)
+```
+
+```{r}
+meteorite_data <- read.csv("data/meteorite-landings.csv")
+
+meteorite_data <- meteorite_data %>% 
+  clean_names() %>%
+  filter(year >= 1970 & year <= 2013) %>% 
+  select(-fall)
+
+meteorite_data_cleaned <- meteorite_data %>%
+  filter(!is.na(reclat) & !is.na(reclong)) %>%
+  filter(!is.na(mass) & !is.na(year)) %>%
+  filter(mass > 0)
+```
+
+# Glimpse of data
+
+```{r}
+meteorite_sf <- st_as_sf(meteorite_data_cleaned, coords = c("reclong", "reclat"), crs = 4326, remove = FALSE)
+
+continents <- ne_countries(scale = "medium", returnclass = "sf") %>%
+  group_by(continent) %>%
+  summarise()
+
+meteorite_data_with_continents <- st_join(meteorite_sf, continents["continent"], join = st_intersects)
+
+meteorite_data_with_continents <- meteorite_data_with_continents %>%
+  mutate(continent = replace_na(continent, "Ocean"))
+
+head(meteorite_data_with_continents)
+```
+
+# Statistics of Variables
+
+```{r}
+summary(meteorite_data_cleaned)
+```
+
+# Distribution of Mass
+
+```{r}
+meteorite_data_cleaned %>%
+  ggplot(aes(x = mass)) +
+  geom_histogram(binwidth = 0.05, fill = "steelblue", color = "black") +
+  scale_x_log10() +
+  labs(
+    title = "Distribution of Meteorite Mass",
+    x = "Mass (log scale)",
+    y = "Count"
+  )
+```
+
+# Numbers of landings through Year
+
+```{r}
+meteorite_data_cleaned %>%
+  ggplot(aes(x = year)) +
+  geom_bar(fill = "coral", color = "black") +
+  labs(
+    title = "Meteorite Landings Over Time",
+    x = "Year",
+    y = "Number of Landings"
+  )
+```

@@ -33,6 +33,7 @@
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
@@ -221,6 +222,9 @@ $(document).ready(function () {
 </style>
 
 <!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
 
 
 
@@ -348,6 +352,14 @@ div.tocify {
 
 <div id="header">
 
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
 
 
 <h1 class="title toc-ignore">Data</h1>
@@ -355,8 +367,23 @@ div.tocify {
 </div>
 
 
+<style>
+body {
+    background-image: url('https://w.wallhaven.cc/full/8o/wallhaven-8o2zd1.jpg');
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: white;
+}
+</style>
 <p>The dataset used in this project was sourced from Kaggle, where it
-was provided as a CSV file.</p>
+was provided as a CSV file. You can explore or download the dataset
+directly from Kaggle by visiting <a
+href="https://www.kaggle.com/code/kinguistics/exploring-meteorite-landing-sites/input">this
+link</a>.</p>
+<div id="clean-data" class="section level1">
+<h1>Clean data</h1>
 <p>As part of the data cleaning, we standardized the column names by
 converting them all to lowercase for consistency and ease of use in
 future analysis. We then filtered the dataset to include only records
@@ -369,6 +396,102 @@ enriched the dataset by creating a new “continent” column. This was
 achieved by classifying each record based on its
 <code>geo_location</code> attribute, which allows for more detailed
 geographic insights in the analysis.</p>
+<pre class="r"><code>meteorite_data &lt;- read.csv(&quot;data/meteorite-landings.csv&quot;)
+
+meteorite_data &lt;- meteorite_data %&gt;% 
+  clean_names() %&gt;%
+  filter(year &gt;= 1970 &amp; year &lt;= 2013) %&gt;% 
+  select(-fall)
+
+meteorite_data_cleaned &lt;- meteorite_data %&gt;%
+  filter(!is.na(reclat) &amp; !is.na(reclong)) %&gt;%
+  filter(!is.na(mass) &amp; !is.na(year)) %&gt;%
+  filter(mass &gt; 0)</code></pre>
+</div>
+<div id="glimpse-of-data" class="section level1">
+<h1>Glimpse of data</h1>
+<pre class="r"><code>meteorite_sf &lt;- st_as_sf(meteorite_data_cleaned, coords = c(&quot;reclong&quot;, &quot;reclat&quot;), crs = 4326, remove = FALSE)
+
+continents &lt;- ne_countries(scale = &quot;medium&quot;, returnclass = &quot;sf&quot;) %&gt;%
+  group_by(continent) %&gt;%
+  summarise()
+
+meteorite_data_with_continents &lt;- st_join(meteorite_sf, continents[&quot;continent&quot;], join = st_intersects)
+
+meteorite_data_with_continents &lt;- meteorite_data_with_continents %&gt;%
+  mutate(continent = replace_na(continent, &quot;Ocean&quot;))
+
+head(meteorite_data_with_continents)</code></pre>
+<pre><code>## Simple feature collection with 6 features and 10 fields
+## Geometry type: POINT
+## Dimension:     XY
+## Bounding box:  xmin: -99.9 ymin: 13.66033 xmax: 42.81667 ymax: 45.82133
+## Geodetic CRS:  WGS 84
+##               name    id nametype      recclass  mass year   reclat   reclong
+## 1         Acapulco    10    Valid   Acapulcoite  1914 1976 16.88333 -99.90000
+## 2 Aioun el Atrouss   423    Valid  Diogenite-pm  1000 1974 16.39806  -9.57028
+## 3          Akyumak   433    Valid     Iron, IVA 50000 1981 39.91667  42.81667
+## 4        Al Zarnkh   447    Valid           LL5   700 2001 13.66033  28.96000
+## 5  Alby sur Chéran   458    Valid Eucrite-mmict   252 2002 45.82133   6.01533
+## 6   Almahata Sitta 48915    Valid   Ureilite-an  3950 2008 20.74575  32.41275
+##              geo_location     continent                  geometry
+## 1 (16.883330, -99.900000) North America    POINT (-99.9 16.88333)
+## 2  (16.398060, -9.570280)        Africa POINT (-9.57028 16.39806)
+## 3  (39.916670, 42.816670)          Asia POINT (42.81667 39.91667)
+## 4  (13.660330, 28.960000)        Africa    POINT (28.96 13.66033)
+## 5   (45.821330, 6.015330)        Europe  POINT (6.01533 45.82133)
+## 6  (20.745750, 32.412750)        Africa POINT (32.41275 20.74575)</code></pre>
+</div>
+<div id="statistics-of-variables" class="section level1">
+<h1>Statistics of Variables</h1>
+<pre class="r"><code>summary(meteorite_data_cleaned)</code></pre>
+<pre><code>##      name                 id          nametype           recclass        
+##  Length:35882       Min.   :    4   Length:35882       Length:35882      
+##  Class :character   1st Qu.:10995   Class :character   Class :character  
+##  Mode  :character   Median :22200   Mode  :character   Mode  :character  
+##                     Mean   :25973                                        
+##                     3rd Qu.:40586                                        
+##                     Max.   :57458                                        
+##       mass              year          reclat          reclong       
+##  Min.   :      0   Min.   :1970   Min.   :-87.37   Min.   :-165.43  
+##  1st Qu.:      6   1st Qu.:1987   1st Qu.:-76.72   1st Qu.:   0.00  
+##  Median :     25   Median :1997   Median :-71.50   Median :  53.95  
+##  Mean   :   1484   Mean   :1995   Mean   :-43.65   Mean   :  66.13  
+##  3rd Qu.:    133   3rd Qu.:2003   3rd Qu.:  0.00   3rd Qu.: 157.22  
+##  Max.   :4000000   Max.   :2013   Max.   : 81.17   Max.   : 178.20  
+##  geo_location      
+##  Length:35882      
+##  Class :character  
+##  Mode  :character  
+##                    
+##                    
+## </code></pre>
+</div>
+<div id="distribution-of-mass" class="section level1">
+<h1>Distribution of Mass</h1>
+<pre class="r"><code>meteorite_data_cleaned %&gt;%
+  ggplot(aes(x = mass)) +
+  geom_histogram(binwidth = 0.05, fill = &quot;steelblue&quot;, color = &quot;black&quot;) +
+  scale_x_log10() +
+  labs(
+    title = &quot;Distribution of Meteorite Mass&quot;,
+    x = &quot;Mass (log scale)&quot;,
+    y = &quot;Count&quot;
+  )</code></pre>
+<p><img src="data_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+</div>
+<div id="numbers-of-landings-through-year" class="section level1">
+<h1>Numbers of landings through Year</h1>
+<pre class="r"><code>meteorite_data_cleaned %&gt;%
+  ggplot(aes(x = year)) +
+  geom_bar(fill = &quot;coral&quot;, color = &quot;black&quot;) +
+  labs(
+    title = &quot;Meteorite Landings Over Time&quot;,
+    x = &quot;Year&quot;,
+    y = &quot;Number of Landings&quot;
+  )</code></pre>
+<p><img src="data_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+</div>
 
 
 
@@ -405,6 +528,11 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
 
 <script>
 $(document).ready(function ()  {

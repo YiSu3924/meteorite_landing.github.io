@@ -31,7 +31,8 @@ meteorite_data <- meteorite_data %>%
 
 meteorite_data_cleaned <- meteorite_data %>%
   filter(!is.na(reclat) & !is.na(reclong)) %>%
-  filter(!is.na(mass) & !is.na(year))
+  filter(!is.na(mass) & !is.na(year)) %>%
+  filter(mass > 0)
 
 summary(meteorite_data_cleaned)
 ```
