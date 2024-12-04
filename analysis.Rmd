@@ -126,7 +126,7 @@ meteorite_data_with_continents <- meteorite_data_with_continents %>%
 levene_test <- leveneTest(mass ~ continent, data = meteorite_data_with_continents)
 print(levene_test)
 ```
-The result of Levene’s Test shows a p-value of $1.85 \times 10^{-11}$, which is far below 0.05. This indicates that the variances of mass across different continents are not equal. Given this result, we should proceed with Welch’s ANOVA instead of the standard ANOVA, as Welch’s ANOVA does not assume equal variances.
+The result of Levene’s Test shows a p-value of $2.2 \times 10^{-16}$, which is far below 0.05. This indicates that the variances of mass across different continents are not equal. Given this result, we should proceed with Welch’s ANOVA instead of the standard ANOVA, as Welch’s ANOVA does not assume equal variances.
 
 Null and Alternative Hypotheses 
 $$ H_0: \mu_{\text{Africa}} = \mu_{\text{Asia}} = \mu_{\text{Europe}} = \mu_{\text{North America}} = \mu_{\text{South America}} = \mu_{\text{Oceania}} = \mu_{\text{Antarctica}}$$
@@ -139,7 +139,7 @@ $$\text{Reject } H_0 \text{ if } p\text{-value} < \alpha = 0.05.$$
 welch_anova <- oneway.test(mass ~ continent, data = meteorite_data_with_continents, var.equal = FALSE)
 print(welch_anova)
 ```
-$$F = 9.2968, \quad \text{df}_1 = 7, \quad \text{df}_2 = 2529, \quad p\text{-value} = 2.062 \times 10^{-11}$$
+$$F = 10.473, \quad \text{df}_1 = 7, \quad \text{df}_2 = 1304.2, \quad p\text{-value} = 7.472 \times 10^{-13}$$
 
 $$\text{Since } p\text{-value} < 0.05, \text{ we reject } H_0.$$
 Conclusion: There is a statistically significant difference in mean meteorite mass across continents.
