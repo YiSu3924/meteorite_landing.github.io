@@ -34,11 +34,8 @@ output:
 
 This project explores meteorite landing data to analyze their geographic distribution, mass, and trends over time. Inspired by events like the Atlas Comet’s close approach and the “two moons” phenomenon, we aim to uncover patterns in how meteorites impact Earth. Using cleaned data from Kaggle, we have identified trends in landing locations, mass variations, and temporal changes.
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/u3XvwFjLeHg" 
-    title="YouTube video player" frameborder="0" 
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-    allowfullscreen></iframe>'
-
+### Learn More About Meteorites
+[![Meteorite Video](https://img.youtube.com/vi/u3XvwFjLeHg/0.jpg)](https://youtu.be/u3XvwFjLeHg)
 
 
 <!-- Add Local Background Music -->
